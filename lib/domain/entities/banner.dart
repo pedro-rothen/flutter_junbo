@@ -1,5 +1,5 @@
-class Banner {
+class AppBanner {
   final String id, name, color;
 
-  Banner({required this.id, required this.name, required this.color});
+  AppBanner({required this.id, required this.name, required this.color});
 }

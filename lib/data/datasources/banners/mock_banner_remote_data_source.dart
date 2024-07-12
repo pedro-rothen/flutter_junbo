@@ -6,7 +6,7 @@ import 'package:uuid/uuid.dart';
 
 class MockBannerRemoteDataSource implements BannerRemoteDataSource {
   @override
-  Future<List<Banner>> getBanners() async {
+  Future<List<AppBanner>> getBanners() async {
     return [
       _mockBanner(name: "Recién llegados"),
       _mockBanner(name: "Para completos"),
@@ -16,14 +16,14 @@ class MockBannerRemoteDataSource implements BannerRemoteDataSource {
   }
 
   @override
-  Future<List<Banner>> getPromotedBanners() async {
+  Future<List<AppBanner>> getPromotedBanners() async {
     final banners = await getBanners();
     final shuffled = banners;
     return shuffled.sublist(0, 3);
   }
 
-  Banner _mockBanner({required String name}) {
-    return Banner(id: const Uuid().v4(), name: name, color: PastelColor.random());
+  AppBanner _mockBanner({required String name}) {
+    return AppBanner(id: const Uuid().v4(), name: name, color: PastelColor.random());
   }
 }
 

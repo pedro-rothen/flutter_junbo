@@ -8,7 +8,7 @@ class GetPromotedBannersUseCaseImpl implements GetPromotedBannersUseCase {
   GetPromotedBannersUseCaseImpl({required this.bannerRepository});
 
   @override
-  Future<List<Banner>> execute() {
+  Future<List<AppBanner>> execute() {
     return bannerRepository.getPromotedBanners();
   }
 }

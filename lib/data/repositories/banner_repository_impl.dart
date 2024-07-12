@@ -8,12 +8,12 @@ class BannerRepositoryImpl implements BannerRepository {
   BannerRepositoryImpl({required this.bannerRemoteDataSource});
 
   @override
-  Future<List<Banner>> getBanners() {
+  Future<List<AppBanner>> getBanners() {
     return bannerRemoteDataSource.getBanners();
   }
 
   @override
-  Future<List<Banner>> getPromotedBanners() {
+  Future<List<AppBanner>> getPromotedBanners() {
     return bannerRemoteDataSource.getPromotedBanners();
   }
 }
