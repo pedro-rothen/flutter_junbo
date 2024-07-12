@@ -1,11 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_junbo/data/datasources/banners/mock_banner_remote_data_source.dart';
+import 'package:flutter_junbo/data/datasources/categories/mock_category_remote_data_source.dart';
+import 'package:flutter_junbo/data/datasources/products/mock_product_remote_data_source.dart';
+import 'package:flutter_junbo/data/repositories/banner_repository_impl.dart';
+import 'package:flutter_junbo/data/repositories/category_repository_impl.dart';
+import 'package:flutter_junbo/data/repositories/product_repository_impl.dart';
+import 'package:flutter_junbo/domain/usecases/banners/get_banners_use_case_impl.dart';
+import 'package:flutter_junbo/domain/usecases/banners/get_promoted_banners_use_case_impl.dart';
+import 'package:flutter_junbo/domain/usecases/categories/get_categories_use_case_impl.dart';
+import 'package:flutter_junbo/domain/usecases/feed/get_feed_use_case.dart';
+import 'package:flutter_junbo/domain/usecases/feed/get_feed_use_case_impl.dart';
+import 'package:flutter_junbo/domain/usecases/products/get_products_use_case_impl.dart';
+import 'package:flutter_junbo/presentation/main/blocs/main_bloc.dart';
+import 'package:flutter_junbo/presentation/main/pages/main_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  final mockCategoryRepository = MockCategoryRemoteDataSource();
+  final categoryRepository = CategoryRepositoryImpl(categoryRemoteDataSource: mockCategoryRepository);
+  final getCategoriesUseCase = GetCategoriesUseCaseImpl(categoryRepository: categoryRepository);
+
+  final mockProductRemoteDataSource = MockProductRemoteDataSource();
+  final productRepository = ProductRepositoryImpl(productRemoteDataSource: mockProductRemoteDataSource);
+  final getProductsUseCase = GetProductsUseCaseImpl(productRepository: productRepository);
+
+  final mockBannerRemoteDataSource = MockBannerRemoteDataSource();
+  final bannerRepository = BannerRepositoryImpl(bannerRemoteDataSource: mockBannerRemoteDataSource);
+  final getBannersUseCase = GetBannersUseCaseImpl(bannerRepository: bannerRepository);
+  final getPromotedBannersUseCase = GetPromotedBannersUseCaseImpl(bannerRepository: bannerRepository);
+
+  final getFeedUseCase = GetFeedUseCaseImpl(
+      getCategoriesUseCase: getCategoriesUseCase,
+      getProductsUseCase: getProductsUseCase,
+      getBannersUseCase: getBannersUseCase,
+      getPromotedBannersUseCase: getPromotedBannersUseCase
+  );
+  runApp(MyApp(mainBloc: MainBloc(getFeedUseCase: getFeedUseCase)));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final MainBloc mainBloc;
+
+  const MyApp({super.key, required this.mainBloc});
 
   // This widget is the root of your application.
   @override
@@ -13,25 +48,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MainPage(mainBloc: mainBloc),
     );
   }
 }

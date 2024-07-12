@@ -1,9 +1,7 @@
 import 'package:flutter_junbo/domain/entities/product.dart';
 
 class Category {
-  final int id;
-  final String name;
-  final List<Product> products;
+  final String id, name, color;
 
-  Category({required this.id, required this.name, required this.products});
+  Category({required this.id, required this.name, required this.color});
 }

@@ -22,13 +22,14 @@ class GetFeedUseCaseImpl implements GetFeedUseCase {
 
   @override
   Future<List<FeedEntry>> execute() async {
+    await Future.delayed(const Duration(seconds: 3));
     //Could be this function mapped into a pipeline with Stream(?)
     List<FeedEntry> feed = [];
-    List<Category> categories = await getCategoriesUseCase.execute();
-    List<Product> products = await getProductsUseCase.execute();
+    final categories = await getCategoriesUseCase.execute();
+    final products = await getProductsUseCase.execute();
     feed.add(FeedEntry(type: FeedEntryType.categories, value: categories));
     for (var category in categories) {
-      List<Product> shuffledProducts = products;
+      final shuffledProducts = products;
       shuffledProducts.shuffle();
       feed.add(
           FeedEntry(
